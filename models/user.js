@@ -1,8 +1,16 @@
-const mongoose = require('mongoose')
+const crypto = require('crypto')
+    , config = require('../config.js').Config
+    , mongoose = require('mongoose')
     , Schema = mongoose.Schema
 
 const genderTypes = ['Unknown', 'Male', 'Female']
 const bloodTypes =  ['Unknown', 'A', 'B', 'AB', 'O']
+
+function hash(password){
+    return crypto.createHmac(config.HASH_ALGORITHM, config.SECRET_KEY)
+                .update(password)
+                .digest('hex')
+}
 
 var userSchema = new Schema({
     username: { type: String, required: true, unique: true },
@@ -23,17 +31,13 @@ var userSchema = new Schema({
     records: [{type:Schema.Types.ObjectId, ref: 'Record',  required: true }]
 })
 
-// userSchema.statics.passwordHash = function(password, callback){
-//     bcrypt.hash(password, salt_rounds, function(err, hash){
-//         callback(err, hash)
-//     })
-// }
+userSchema.statics.passwordHash = function(password){
+    return hash(password)
+}
 
-// userSchema.static.passwordCompare = function(password, hash, callback){
-//     bcrypt.compare(password, hash, function(err, result){
-//         callback(err, result)
-//     })
-// }
+userSchema.statics.passwordCompare = function(password, hashed_pwd){
+    return hash(password) == hashed_pwd ? true : false
+}
 
 userSchema.statics.activate = function(query, callback){
     // new: bool - if true, return the modified document rather than the original. defaults to false (changed in 4.0)

@@ -16,7 +16,7 @@ describe('User Test', function(){
     it('create user', function(done){
         var dummy = new User({
             username: "dummy",
-            password: "1234567",
+            password: User.passwordHash("1234567"),
             email: "dummy@dummy.com",
             profile: {
                 birthday: new Date(1990, 3, 14),
@@ -32,11 +32,6 @@ describe('User Test', function(){
             done()
         })
     })
-
-    it('add profile', function(done){
-
-    })
-
 
     it('activate user', function(done){
         User.findOne({username: "dummy"}, function(err, doc){
@@ -77,6 +72,21 @@ describe('User Test', function(){
     it('find user', function(done){
         User.findOne({username: "dummy"}, function(err, doc){
             assert.equal(doc.username, "dummy")
+            done()
+        })
+    })
+
+    it('test user password', function(done){
+        User.findOne({username: "dummy"}, function(err, doc){
+            assert.equal(doc.password, User.passwordHash("1234567"))
+            done()
+        })
+    })
+
+    it('test password compare', function(done){
+
+        User.findOne({username: "dummy"}, function(err, doc){
+            assert.equal( User.passwordCompare("1234567", doc.password), true)
             done()
         })
     })

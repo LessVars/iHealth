@@ -2,25 +2,12 @@ const express = require('express')
     , router = express.Router()
 
 router.get('/', function(req, res, next){
-    
+    res.render('user/index.html')
 })
 
-router.get('/signup', function(req, res, next){
-
-})
-
-router.post('/signup', function(req, res, next){
-
-})
-
-router.get('/signin', function(req, res, next){
-
-})
-
-router.post('/signin', function(req, res, next){
-
-})
-
-
-
-exports.router = router
+/**
+ * we can use glob to regist in one shoot!
+ */
+module.exports = function(app){
+    app.use('/user', router)
+}

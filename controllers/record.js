@@ -2,4 +2,9 @@ const express = require('express')
     , router = express.Router()
 
 
-exports.router = router
+/**
+ * we can use glob to regist in one shoot!
+ */
+module.exports = function(app){
+    app.use('/record', router)
+}

@@ -6,4 +6,9 @@ router.get('/', function(req, res, next){
 })
 
 
-exports.router = router
+/**
+ * we can use glob to regist in one shoot!
+ */
+module.exports = function(app){
+    app.use('/', router)
+}
