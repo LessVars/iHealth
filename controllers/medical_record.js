@@ -6,5 +6,5 @@ const express = require('express')
  * we can use glob to regist in one shoot!
  */
 module.exports = function(app){
-    app.use('/record', router)
+    app.use('/medical_record', router)
 }

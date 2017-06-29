@@ -28,7 +28,7 @@ var userSchema = new Schema({
         weight: { type: Number },
         bloodType: { type: String, enum: bloodTypes }
     },
-    records: [{type:Schema.Types.ObjectId, ref: 'Record',  required: true }]
+    medicalRecords: [{type:Schema.Types.ObjectId, ref: 'MedicalRecord',  required: true }]
 })
 
 userSchema.statics.passwordHash = function(password){
@@ -55,6 +55,18 @@ userSchema.statics.deactivate = function(query, callback){
     })
 }
 
+userSchema.statics.isNameExist = function(username, callback){
+    this.model("User").findOne({username: username}, function(err, result){
+        callback(err, result != null ? true : false)
+    })
+}
+
+userSchema.statics.isEmailExist = function(email, callback){
+    this.model("User").findOne({email: email}, function(err, result){
+        callback(err, result != null ? true : false)
+    })
+}
+
 userSchema.methods.activate = function(callback){
     this.activated = true
     this.save(function(err){
@@ -67,6 +79,10 @@ userSchema.methods.deactivate = function(callback){
     this.save(function(err){
         if(err) return callback(err)
     })
+}
+
+userSchema.methods.validPassword = function(password){
+    return hash(password) == this.password ? true : false
 }
 
 exports.genderTypes = genderTypes

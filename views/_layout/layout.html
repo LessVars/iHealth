@@ -24,6 +24,25 @@
   {% endif %}
 </head>
 <body>
+    {{ messages.lenght }}
+
+    {% if messages.danger %}
+        {{ messages.danger }}
+    {% endif %}
+
+    {% if messages.info %}
+        {{ messages.info }}
+    {% endif %}
+
+    {% if messages.warning %}
+        {{ messages.warning }}
+    {% endif %}
+
+
+    {% if messages.success %}
+        {{ messages.success }}
+    {% endif %}
+
   {% block content %}{% endblock %}
 
   <script src="vendor/jquery/jquery.min.js"></script>

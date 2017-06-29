@@ -91,6 +91,34 @@ describe('User Test', function(){
         })
     })
 
+    it('test if username exist', function(done){
+        User.isNameExist("dummy", function(err, result){
+            assert.equal(true, true)
+            done()
+        })
+    })
+
+    it('test if username exist', function(done){
+        User.isNameExist("dummy2", function(err, result){
+            assert.equal(false, false)
+            done()
+        })
+    })
+
+    it('test if email exist', function(done){
+        User.isNameExist("dummy@dummy.com", function(err, result){
+            assert.equal(true, true)
+            done()
+        })
+    })
+
+    it('test if email exist', function(done){
+        User.isNameExist("dummy@dummy2.com", function(err, result){
+            assert.equal(false, false)
+            done()
+        })
+    })
+
     it('delete user', function(done){
         User.findOneAndRemove({username: "dummy"}, function(err, res){
             assert.equal(err, null)

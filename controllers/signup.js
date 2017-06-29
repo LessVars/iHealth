@@ -8,35 +8,57 @@ router.get('/', function(req, res, next){
 
 router.post('/', function(req, res, next){
 
-    console.log(req.body.username)
-    console.log(req.body.password)
+    // console.log(req.body.username)
+    // console.log(req.body.email)
+    // console.log(req.body.password)
 
-    req.flash('info', 'Flash message added')
-
-    // User.passwordHash(req.body.password, function(err, hash){
-    //     if(err) { console.log('Hash Error') }
-
-    //     if(!hash){
-    //         console.log('No Hash Results');
-    //     } 
+    User.isNameExist(req.body.username, function(err, result){
+        if (err) { next(err) }
         
-    //     var newUser = new User({
-    //         username: req.body.username,
-    //         email: req.body.email,
-    //         password_hash: hash,
-    //         lastLogin: Date.now()
-    //     });
+        console.log(result)
 
-    //     newUser.save( function(err, user){
-    //         if(err) { console.log('Save Error : ' + err) }
+        if (result){
+            console.log('Username already exist.')
+            req.flash('warning', 'Username already exist.')
+            res.redirect('/signup')
+            return
+        }
 
-    //         console.log('Saved user name:' + user.username);
-    //         console.log('_id of saved user: ' + user._id);
-    //         console.log('Saved user password_hash: ' + user.password_hash);
-    //     });
-    // });
+        User.isEmailExist(req.body.email, function(err, result){
+            if (err) { next(err) }
 
-    res.redirect('/user');
+            if (result){
+                console.log('Email already exist.')
+                req.flash('info', 'Email already exist.')
+                res.redirect('/signup')
+                return
+            }
+
+            console.log('everything is okay!')
+
+            // everything is ok.
+            var user = new User({
+                username: req.body.username,
+                password: User.passwordHash(req.body.password),
+                email: req.body.email
+            })
+
+            // save to DB
+            User.create(user, function(err, result){
+                if(err) { next(err) } 
+                
+                if(result != null){
+                    console.log(result)
+                    req.flash('success', 'Register Successfully')
+                    res.redirect('/signin');
+                }
+                else{
+                    var error = new Error('Create user failed')
+                    next(error)
+                }
+            })
+        })
+    })
 })
 
 /**

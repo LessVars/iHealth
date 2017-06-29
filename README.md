@@ -1,2 +1,6 @@
-# iMedicalRecord
-Personal Medical Record
+# iHealth
+
+Personal Health Management System
+
+* Physical examination
+* Medical Record

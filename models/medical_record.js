@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
     , Schema = mongoose.Schema
 
-var recordSchema = Schema({
+var medicalRecordSchema = Schema({
     _user: { type:Schema.Types.ObjectId, ref: 'User', required: true },
     symptom: { type: String },
     diagnosticDate : { type:Date, default: Date.now },
@@ -17,4 +17,4 @@ var recordSchema = Schema({
     createdOn:{ type:Date, default:Date.now }
 })
 
-exports.Record = mongoose.model('Record', recordSchema)
+exports.MedicalRecord = mongoose.model('MedicalRecord', medicalRecordSchema)

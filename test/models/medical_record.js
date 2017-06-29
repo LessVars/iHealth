@@ -1,7 +1,7 @@
 const assert = require('assert')
     , connection = require('../../db.js').connection
     , User = require('../../models/user.js').User
-    , Record = require('../../models/record.js').Record
+    , MedicalRecord = require('../../models/medical_record.js').MedicalRecord
 
 // create a dummy user for test.
 var dummy = new User({
@@ -14,13 +14,13 @@ User.create(dummy, function(err, saved_dummy){
     console.log('dummy user created')
 }).then(
 
-    describe("Test User Records", function(){
+    describe("Test User MedicalRecords", function(){
 
-        it('create user Record', function(done){
+        it('create user MedicalRecord', function(done){
 
             User.findOne({username: "dummy"}, function(err, user) {
 
-                var record = new Record({
+                var medicalRecord = new MedicalRecord({
                     _user: user,
                     symptom: "眩晕",
                     diagnosticDate : new Date(2017, 6, 13),
@@ -42,17 +42,17 @@ User.create(dummy, function(err, saved_dummy){
                     }],
                 })
 
-                // push this record to user.
+                // push this MedicalRecord to user.
 
-                Record.create(record, function(err, saved_record){
-                    console.log(saved_record)
-                    assert.equal(saved_record.symptom, "眩晕")
+                MedicalRecord.create(medicalRecord, function(err, saved_medicalRecord){
+                    console.log(saved_medicalRecord)
+                    assert.equal(saved_medicalRecord.symptom, "眩晕")
 
                     if (err){
                         console.error(err)
                     }
                     else{
-                        user.records.push(record)
+                        user.medicalRecords.push(medicalRecord)
                         user.save()
                     }
                 })
@@ -60,12 +60,12 @@ User.create(dummy, function(err, saved_dummy){
             })
         })
 
-        it('get user record', function(done){
-           Record
+        it('get user MedicalRecord', function(done){
+           MedicalRecord
            .find({_user:dummy._id})
-           .exec(function(err, records){
-               console.log(records)
-               assert.equal(records.length, 1)
+           .exec(function(err, medicalRecords){
+               console.log(medicalRecords)
+               assert.equal(medicalRecords.length, 1)
                done()
            })
         })

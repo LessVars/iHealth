@@ -1,43 +1,64 @@
 const path = require('path')
     , glob = require('glob')
 
-const express    = require('express')
-    , session    = require('express-session')
-    , flash      = require('express-flash')
-    , bodyParser = require('body-parser')
-    , favicon    = require('serve-favicon')
-    , nunjucks   = require('nunjucks')
+const express       = require('express')
+    , logger        = require('morgan')
+    , session       = require('express-session')
+    , flash         = require('express-flash')
+    , cookieParser  = require('cookie-parser')
+    , bodyParser    = require('body-parser')
+    , favicon       = require('serve-favicon')
+    , nunjucks      = require('nunjucks')
+    , passport      = require('passport')
 
+    // load db connection
+    , connection = require('./db.js').connection
     // load config    
     , config = require('./config.js').Config
 
 const app = express()
-var sessionStore = new session.MemoryStore
+app.locals.dbConnection = connection
 
 // set our mark! the favicon
 app.use(favicon(path.join(config.PATH.PUBLIC, 'favicon.ico')))
-
-app.use(express.session({ cookie: { maxAge: 60000 }}));
-app.use(flash())
-
 // set template engine.
 nunjucks.configure('views',{
     autoescape: true,
     express: app
 })
 
+app.use(logger('dev'))
+
 // set Static files directory
 app.use(express.static('public'))
 
-
+// app.use(cookieParser('keyboard cat'))
 
 // to support JSON-encoded bodies
 app.use(bodyParser.json());
 
 // to support URL-encoded bodies
-app.use(bodyParser.urlencoded({
-    extended: true
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// https://github.com/expressjs/session
+app.use(session({ 
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true
 }));
+app.use(flash())
+
+// http://passportjs.org/docs/username-password
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use(function(req, res, next){
+    console.log('Code @ express.js :) ');
+    console.log(res.locals)
+    console.log(req.user);
+    res.locals.user = req.user;
+    next();
+});
 
 // Register Routing
 const controllers = glob.sync(path.join(config.PATH.CONTROLLERS, '*.js'))
@@ -45,7 +66,7 @@ controllers.forEach(function(controller) {
     require(controller)(app)
 }, this);
 
-// Error handler
+// catch 404 and forward to error handler
 app.use(function(req, res, next){
     res.status(404)
 

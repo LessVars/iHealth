@@ -9,10 +9,12 @@ const configTypes = {
 exports.configTypes = configTypes
 
 function Config(configType) {
-    this.APP_NAME = 'i Medical Record'
+    this.APP_NAME = 'iHealth'
     this.APP_ADMIN = 'hexcola@gmail.com'
+    this.PORT = process.env.PORT || 3000
     this.SECRET_KEY = '' || 'hard to guess'
     this.HASH_ALGORITHM = '' || 'sha1'
+    this.SALT_ROUNDS = 10
     this.PATH = {
         ROOT: path.resolve(__dirname),
         PUBLIC: path.join(__dirname, 'public'),

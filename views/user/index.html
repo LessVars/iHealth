@@ -1,11 +1,30 @@
-{{ messages.info }}
+{{ messages }}
+
+{% if messages.danger %}
+    {{ messages.danger }}
+{% endif %}
+
+{% if messages.info %}
+    {{ messages.info }}
+{% endif %}
+
+{% if messages.warning %}
+    {{ messages.warning }}
+{% endif %}
+
+
+{% if messages.success %}
+    {{ messages.success }}
+{% endif %}
+
+{{ username }}
 
 
 
-<!--{% if expressFlash.lenght > 0 %}
+{% if expressFlash.lenght > 0 %}
     {{ expressFlash }}
 {% endif %}
 
 {% if sessionFlash and sessionFlash.message %}
     {{ sessionFlash.message }}
-{% endif %}-->
+{% endif %}
