@@ -27,18 +27,18 @@ function Config(configType) {
 
         case configTypes.Testing:
             this.DB = {
-                URI: 'mongodb://localhost:32769/imr_test',
+                URI: 'mongodb://localhost:32768/imr_test',
                 OPTIONS: { server: { poolSize: 5 }}
             }
         case configTypes.Production:
             this.DB = {
-                URI: 'mongodb://localhost:32769/imr',
+                URI: 'mongodb://localhost:32768/imr',
                 OPTIONS: { server: { poolSize: 5 }}
             }
             break
         default: // default is development state
             this.DB = {
-                URI: 'mongodb://localhost:32769/imr_dev',
+                URI: 'mongodb://localhost:32768/imr_dev',
                 OPTIONS: { server: { poolSize: 5 }}
             }
     }
